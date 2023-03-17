@@ -1,7 +1,7 @@
-/* PROJECT BRAIN STUPID
+/*
  * Some debugging here?
  *
- * compileWith$ gcc -g3 -o thisCfile thisCfile.c
+ * compileWith$ gcc -Wall -g3 -o thisCfile thisCfile.c
  *
  */
 #include <stdio.h>
@@ -9,23 +9,27 @@
 
 #include "vercod.h"
 
-unsigned int asctovcode(char inChar) {
+// hash lookup macro -
+#define ASCTOVCODE(INCHAR) ({int retval; printf("%c=", INCHAR); \
+	retval = vcode[(unsigned int)INCHAR]; retval;})  // reveal
+/*
+inline unsigned int asctovcode(char inChar) {
 	printf("%c=", inChar);
 	return vcode[inChar];
 }
-/*
+
 int symOut(char *inMsg) {  // Verycold translation and output routine
 	int msgChar = 0;        // messages from the beyond of the beyond
 	int veriByte;
 
-	while(inMsg[msgChar] != 0) {             // Done yet?
-		veriByte = vcode[inMsg[msgChar]];    // Hash lookup
+	while(inMsg[msgChar] != 0) {             // done yet?
+		veriByte = vcode[inMsg[msgChar]];    // hash lookup
 		printf("%c=", inMsg[msgChar]);       // DEBUG
-		do {                                 // Binary conversion {}
+		do {                                 // binary conversion {}
 			putchar((veriByte & 1) ? *"1" : *"0");  // LSB bit test 0
-		} while(veriByte >>= 1);             // Next right shift
+		} while(veriByte >>= 1);             // next right shift
 		puts(" 00");                         // DEBUG
-		msgChar++;                           // Next character
+		msgChar++;                           // next character
 	}
 	//putchar(0x0a);                           // DEBUG
 }
@@ -35,7 +39,7 @@ void symOut(int veriByte) {
 }
 
 int main() {
-	char text[] = "Greetings, planet!";
+	const char text[] = "Greetings, planet!";
 	unsigned int textlen;
 	unsigned int strgc = 0;
 	unsigned int pskByte;
@@ -47,10 +51,10 @@ int main() {
 	}  */
 	textlen = strlen(text);
 	while(1) {
-			pskByte = asctovcode(text[strgc]);
-			do {                                // Binary conversion {}
+			pskByte = ASCTOVCODE(text[strgc]);  // get next character
+			do {                                // binary conversion {}
 				symOut(pskByte);
-			} while(pskByte >>= 1);             // Next right shift
+			} while(pskByte >>= 1);             // next right shift
 			puts(" 00");
 			strgc++;
 			if(strgc >= textlen) break;
